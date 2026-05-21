@@ -1,0 +1,6 @@
+{
+  "name": "Global Market Weather Visualizer",
+  "description": "Visualize stock markets of countries around the world as weather forecasts, with dynamic forecasts, interactive indices, and AI-powered outlook predictions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
