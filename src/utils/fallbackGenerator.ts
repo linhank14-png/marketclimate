@@ -2,12 +2,18 @@ import { MarketWeather, WeatherCondition } from "../types";
 
 export function get5TradingDayLabels(forceDate?: Date): string[] {
   const date = forceDate || new Date();
-  const day = date.getDay(); // 0 (Sun) to 6 (Sat)
-  if (day === 2) return ["Tue", "Wed", "Thu", "Fri", "Next Mon"];
-  if (day === 3) return ["Wed", "Thu", "Fri", "Next Mon", "Next Tue"];
-  if (day === 4) return ["Thu", "Fri", "Next Mon", "Next Tue", "Next Wed"];
-  if (day === 5) return ["Fri", "Next Mon", "Next Tue", "Next Wed", "Next Thu"];
-  return ["Mon", "Tue", "Wed", "Thu", "Fri"];
+  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const out: string[] = [];
+  let current = new Date(date);
+  
+  while (out.length < 5) {
+    const day = current.getDay();
+    if (day !== 0 && day !== 6) { // Skip Sunday (0) and Saturday (6)
+      out.push(weekdays[day]);
+    }
+    current.setDate(current.getDate() + 1);
+  }
+  return out;
 }
 
 export function generateUniqueAlert(market: MarketWeather) {

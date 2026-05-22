@@ -527,7 +527,7 @@ export default function App() {
 
             {lastSyncTime && (
               <div className="flex flex-wrap gap-2 items-center">
-                <div className="flex items-center gap-2 bg-slate-900/60 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono text-emerald-400" title={isZht ? "數據基準：Investing.com & 玩股網 (WantGoo) 實時對流" : isZh ? "数据基准：Investing.com & 玩股网 (WantGoo) 实时对流" : "Data Authority: Investing.com & WantGoo Live Sync"}>
+                <div className="flex items-center gap-2 bg-slate-900/60 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono text-emerald-400" title={isZht ? "數據基準：Investing.com 實時對流" : isZh ? "数据基准：Investing.com 实时对流" : "Data Authority: Investing.com Live Sync"}>
                   <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
                   <span>
                     {isZht 
@@ -809,19 +809,12 @@ export default function App() {
                         <div className="text-[10px] text-white/70 font-mono mt-3 flex items-center gap-1.5">
                           <span className="inline-block w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
                           <span>
-                            {selectedCountry.country === "Taiwan" ? (
-                              isZht 
-                                ? `數據來源：玩股網 (WantGoo) 專家加權指數 & 台灣交易所實時同步於 ${new Date(lastSyncTime).toLocaleTimeString()}`
-                                : isZh
-                                ? `数据来源：玩股网 (WantGoo) 专家加权指数 & 台湾交易所实时同步于 ${new Date(lastSyncTime).toLocaleTimeString()}`
-                                : `Synced with WantGoo & TWSE Real-time Index Feed at ${new Date(lastSyncTime).toLocaleTimeString()}`
-                            ) : (
-                              isZht 
-                                ? `數據來源：雅虎財經 (實時同步於 ${new Date(lastSyncTime).toLocaleTimeString()})`
-                                : isZh
-                                ? `数据来源：雅虎财经 (实时同步于 ${new Date(lastSyncTime).toLocaleTimeString()})`
-                                : `Synced with Yahoo Finance at ${new Date(lastSyncTime).toLocaleTimeString()}`
-                            )}
+                            {isZht 
+                              ? `數據來源：Investing.com (實時同步於 ${new Date(lastSyncTime).toLocaleTimeString()})`
+                              : isZh
+                              ? `数据来源：Investing.com (实时同步于 ${new Date(lastSyncTime).toLocaleTimeString()})`
+                              : `Source: Investing.com (Synced at ${new Date(lastSyncTime).toLocaleTimeString()})`
+                            }
                           </span>
                         </div>
                       )}
@@ -850,8 +843,11 @@ export default function App() {
                         dayItem.condition === "cloudy" ? "☁️" :
                         dayItem.condition === "rainy" ? "🌧️" : "⛈️";
                       
-                      const isMid = idx === 2; // Midweek highlight (Wednesday in Mon-Fri)
+                      const isToday = idx === 0; // Highlight current day (Today)
                       const getLocalizedDay = (day: string) => {
+                        if (idx === 0) {
+                          return isZht ? "今日" : isZh ? "今日" : "Today";
+                        }
                         if (!isZh) return day;
                         const map: Record<string, string> = {
                           "Mon": "周一", "Tue": "周二", "Wed": "周三", "Thu": "周四", "Fri": "周五", "Sat": "周六", "Sun": "周日"
@@ -863,12 +859,12 @@ export default function App() {
                         <div 
                           key={dayItem.day} 
                           className={`py-2 rounded-xl flex flex-col items-center justify-center border transition-all ${
-                            isMid 
-                              ? "bg-white/20 border-white/30 backdrop-blur-md" 
-                              : "bg-white/10 border-white/5"
+                            isToday 
+                              ? "bg-white/20 border-white/30 backdrop-blur-md ring-1 ring-white/10" 
+                              : "bg-white/10 border-white/5 opacity-80"
                           }`}
                         >
-                          <span className={`text-[9px] mb-0.5 uppercase font-mono font-extrabold ${isMid ? "text-white" : "text-white/60"}`}>
+                          <span className={`text-[9px] mb-0.5 uppercase font-mono font-extrabold ${isToday ? "text-cyan-250 text-cyan-300" : "text-white/60"}`}>
                             {getLocalizedDay(dayItem.day)}
                           </span>
                           <span className="text-lg leading-none mb-0.5 selection:bg-none">{dayEmoji}</span>

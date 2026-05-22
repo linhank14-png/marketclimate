@@ -27,8 +27,11 @@ export default function OutlookForecastChart({ data, isZh = false }: OutlookFore
   const tempKey = isZh ? "估值热度 (°C)" : "Valuation Temp (°C)";
   const changeKey = isZh ? "每日波动 (%)" : "Daily Change (%)";
 
-  const chartData = data.map((item) => {
+  const chartData = data.map((item, idx) => {
     const getLocalizedDay = (day: string) => {
+      if (idx === 0) {
+        return isZh ? "今日" : "Today";
+      }
       if (!isZh) return day;
       const map: Record<string, string> = {
         "Mon": "週一", "Tue": "週二", "Wed": "週三", "Thu": "週四", "Fri": "週五", "Sat": "週六", "Sun": "週日"
