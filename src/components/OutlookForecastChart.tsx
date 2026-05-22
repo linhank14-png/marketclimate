@@ -15,10 +15,10 @@ import {
   ReferenceLine,
   CartesianGrid,
 } from "recharts";
-import { SevenDayOutlook, WEATHER_METADATA } from "../types";
+import { FiveDayTradingOutlook, WEATHER_METADATA } from "../types";
 
 interface OutlookForecastChartProps {
-  data: SevenDayOutlook[];
+  data: FiveDayTradingOutlook[];
   isZh?: boolean;
 }
 
@@ -82,7 +82,7 @@ export default function OutlookForecastChart({ data, isZh = false }: OutlookFore
   return (
     <div className="w-full h-[290px] bg-slate-900/30 border border-slate-800 p-5 rounded-3xl relative">
       <h4 className="text-xs uppercase tracking-wider text-slate-400 font-mono mb-4 flex items-center justify-between font-bold">
-        <span>{isZh ? "七日金融模擬氣候走勢" : "7-Day Meteorological Outlook"}</span>
+        <span>{isZh ? "五日金融模擬氣候走勢" : "5-Day Meteorological Outlook"}</span>
         <span className="text-[10px] text-blue-400">
           {isZh ? "估值温度与指数趋势动能图" : "Valuation Temp vs Price Pressure"}
         </span>

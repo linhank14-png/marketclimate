@@ -5,7 +5,7 @@
 
 export type WeatherCondition = 'clear_skies' | 'partly_cloudy' | 'cloudy' | 'rainy' | 'thunderstorms';
 
-export interface SevenDayOutlook {
+export interface FiveDayTradingOutlook {
   day: string;
   condition: WeatherCondition;
   temp: number;
@@ -26,7 +26,13 @@ export interface MarketWeather {
   alert: string | null; // e.g., Bubble or Crash alert
   summary: string; // Thematic weather comparison
   economicAnalysis: string; // Brief analysis of economic and index conditions
-  outlook7Day: SevenDayOutlook[];
+  outlook5Day: FiveDayTradingOutlook[];
+  summaryZh?: string;
+  summaryZht?: string;
+  economicAnalysisZh?: string;
+  economicAnalysisZht?: string;
+  alertZh?: string | null;
+  alertZht?: string | null;
 }
 
 export const WEATHER_METADATA: Record<WeatherCondition, {

@@ -47,6 +47,8 @@ export default function App() {
   const [markets, setMarkets] = useState<MarketWeather[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<MarketWeather | null>(null);
   const [isAiEnabled, setIsAiEnabled] = useState(false);
+  const [lastSyncTime, setLastSyncTime] = useState<number | null>(null);
+  const [countdown, setCountdown] = useState<number>(300);
   
   // UX Interaction States
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -89,6 +91,7 @@ export default function App() {
       "S&P 500": isZht ? "標普500指數" : "标普500指数",
       "Nikkei 225": isZht ? "日經225指數" : "日经225指数",
       "Nifty 50": isZht ? "印度Nifty 50指數" : "印度Nifty 50指数",
+      "BSE SENSEX": isZht ? "孟買SENSEX指數" : "孟买SENSEX指数",
       "DAX 40": isZht ? "德國DAX 40指數" : "德国DAX 40指数",
       "FTSE 100": isZht ? "英國富時100指數" : "英国富时100指数",
       "CAC 40": isZht ? "法國CAC 40指數" : "法国CAC 40指数",
@@ -97,18 +100,16 @@ export default function App() {
       "IBOVESPA": isZht ? "巴西IBOVESPA指數" : "巴西IBOVESPA指数",
       "S&P/TSX Composite": isZht ? "加拿大S&P/TSX綜合指數" : "加拿大S&P/TSX综合指数",
       "SMI": isZht ? "瑞士SMI指數" : "瑞士SMI指数",
-      "KOSPI": isZht ? "韓國綜合指數" : "韩国综合指数",
-      "TAIEX": isZht ? "台灣加權指數" : "台湾加权指数",
-      "IPC": isZht ? "墨西哥IPC指數" : "墨西哥IPC指数",
-      "STI": isZht ? "新加坡海峽時報指數" : "新加坡海峡时报指数",
-      "MOEX": isZht ? "俄羅斯MOEX指數" : "俄罗斯MOEX指数",
-      "JSE Top 40": isZht ? "南非JSE Top 40指數" : "南非JSE Top 40指数",
-      "FTSE MIB": isZht ? "義大利MIB指數" : "意大利MIB指数"
+      "TAIEX": isZht ? "臺灣加權指數" : "台湾加权指数",
     };
     return map[index] || index;
   };
 
   const getLocalizedSummary = (country: string, defaultSummary: string) => {
+    const market = markets.find(m => m.country === country);
+    if (isZht && market?.summaryZht) return market.summaryZht;
+    if (isZh && market?.summaryZh) return market.summaryZh;
+
     if (!isZh && !isZht) return defaultSummary;
     const clean = country.trim();
     if (isZht) {
@@ -122,7 +123,8 @@ export default function App() {
         "China": "金融氣象台錄得極度明顯的局部防空雷暴。部分重整中的地產信用違約電流使多頭遭受高空避雷針效應阻礙。",
         "Australia": "太平洋和煦微風和緩拂過，雲氣穩定。隨著鐵礦等資源價格築底回暖，採礦巨頭股正沐浴在充沛的日照中。",
         "Brazil": "石化與大豆期貨價格波動劇烈，引發連續暴雨。財政結構性預算赤字拖累了匯率氣壓梯度，讓短期估值承壓。",
-        "Canada": "秋高氣爽，暖冬日照舒適。得益於國際原油堅守在78美元高空，主要能源信託大盤維持高勢晴空脊梁。"
+        "Canada": "秋高氣爽，暖冬日照舒適。得益於國際原油堅守在78美元高空，主要能源信託大盤維持高勢晴空脊梁。",
+        "Taiwan": "晶片半導體多頭和風持續吹拂，天空晴朗。強大的高科技晶圓出口浪潮正為台股提供高度穩定的高空暖氣流護體。"
       };
       return summaryMap[clean] || defaultSummary;
     } else {
@@ -130,25 +132,30 @@ export default function App() {
         "United States": "温热晴朗的高气压牛市，天空清澈。活跃的资本流入正为交易板块煽起一系列乐观前景的和风。",
         "Japan": "舒适的和风伴随零星云层。日本公司治理及再分配的稳步提振正为大盘投下一片和煦的微弱阳光。",
         "India": "印度本地金融枢纽上空阳光灿烂，碧空无云。活跃的散户与外资买气正在为中盘股注入强劲的上升对流。",
-        "Germany": "云层滞留在上空，无风少动。扁平的工业与汽车出口需求使得股指几乎原地无序漂流。",
+        "Germany": "云层滞留在上空，无风少动。扁平的工业与汽车出口需求使得股指几乎原地无序流。",
         "United Kingdom": "浓雾微起，阴雨绵绵。高股息红利防御板块正像雨伞一样，抵御着全球周期性出口降温的侵袭。",
         "France": "一股冷锋伴随持续阵雨，袭击大盘蓝筹。海外市场高端消费偏好变动，正引来局部性降雨降温。",
         "China": "金融气象台录得极度明显的局部防空雷暴。部分重整中的地产信用违约电流使多头遭受高空避雷针效应阻碍。",
         "Australia": "太平洋和煦微风和缓拂过，云气稳定。随着铁矿等资源价格筑底回暖，采矿巨头股正沐浴在充沛的日照中。",
         "Brazil": "石化与大豆期货价格波动剧烈，引发连续暴雨。财政结构性预算赤字拖累了汇率气压梯度，让短期估值承压。",
-        "Canada": "秋高气爽，暖冬日照舒适。得益于国际原油坚守在78美元高空，主要能源信托大盘维持高势晴空脊梁。"
+        "Canada": "秋高气爽，暖冬日照舒适。得益于国际原油坚守在78美元高空，主要能源信託大盘维持高势晴空脊梁。",
+        "Taiwan": "芯片半导体多头和风持续吹拂，天空晴朗。强大的高科技晶圆出口浪潮正为台股提供高度稳定的高空暖气流护体。"
       };
       return summaryMap[clean] || defaultSummary;
     }
   };
 
   const getLocalizedAnalysis = (country: string, defaultAnalysis: string) => {
+    const market = markets.find(m => m.country === country);
+    if (isZht && market?.economicAnalysisZht) return market.economicAnalysisZht;
+    if (isZh && market?.economicAnalysisZh) return market.economicAnalysisZh;
+
     if (!isZh && !isZht) return defaultAnalysis;
     const clean = country.trim();
     if (isZht) {
       const analysisMap: Record<string, string> = {
         "United States": "第一季GDP強勁增長3.1%，就業報告表現堅韌。儘管核心CPI上漲2.8%略有粘性，但美聯儲釋放出的潛在降息預期刺激了科技與金融板塊的全面買盤。",
-        "Japan": "儘管日本央行正式退出了負利率時代，但其依然宣布維持極度寬鬆的貨幣政策環境。本土治理結構改革不斷推進，使得海外中長期機構資金穩步流入。",
+        "Japan": "儘管日本央行正式退出了負利率時代，但其依然宣布維持極度寬鬆 of 貨貨幣政策環境。本土治理結構改革不斷推進，使得海外中長期機構資金穩步流入。",
         "India": "印度第三季GDP年增率達8.2%傲視全場，主要得益於高額基建開支與穩定的先進製造需求。儘管美聯儲利率前景不明，但本土龐大的散戶買氣依舊對衝了國際市場的寒意。",
         "Germany": "歐元區工業PMI疲軟低走在45.4，折射出工業大國出口不振的冷空氣。雖然能源物價下降有所緩解，但消費情緒結冰導致大盤上漲勢能基本被中和。",
         "United Kingdom": "GDP錄得零以上的微弱正增長，助力英國經濟走出技術性淺衰退。堅挺的北海原油價格與穩定的英鎊走勢減慢了大盤跌幅。",
@@ -156,7 +163,8 @@ export default function App() {
         "China": "不景氣的房企去槓桿對衝以及偏弱的大宗通縮數據，使市場預期貸款基準利率進一步向下修正。儘管國家隊多次入市注水融雪，散戶避險盤整依然明顯。",
         "Australia": "對主要貿易夥伴的煤礦與鋰資源出口堅固，支撐了大型礦產卡特爾的元氣。不過，由於本國通脹反彈，澳聯儲長期維持緊縮基調，壓制了零售與消費者指數。",
         "Brazil": "政府預算赤字走高，拖累了巴西雷亞爾的匯率走勢。與此同時，國際市場對於大豆和鐵礦石大宗商品的短期需求放緩，提高了整個新興拉丁美洲市盈率估值溢價。",
-        "Canada": "國際原油價格堅守在每桶78美元上方，大幅提振了加國核心能源信託基金。加拿大央行暗示通脹正邁入2%的目標區間，緩解了加國六大行所承受的加息折舊壓力。"
+        "Canada": "國際原油價格堅守在每桶78美元上方，大幅提振了加國核心能源信託基金。加拿大央行暗示通脹正邁入2%的目標區間，緩解了加國六大行所承受的加息折舊壓力。",
+        "Taiwan": "全球人工智能（AI）計算革命風起雲湧，帶動台灣頂尖高集成芯片技術供應鏈爆發性增長。本國科技類出口外銷暢旺，推動加權指數氣壓計呈現扎實的上升暖鋒。"
       };
       return analysisMap[clean] || defaultAnalysis;
     } else {
@@ -170,13 +178,18 @@ export default function App() {
         "China": "不景气的房企去杠杆对冲以及偏弱的大宗通缩数据，使市场预期贷款基准利率进一步向下修正。尽管国家队多次入市注水融雪，散户避险盘整依然明显。",
         "Australia": "对主要贸易伙伴的煤矿与锂资源出口坚固，支撑了大型矿产卡特尔的元气。不过，由于本国通涨反弹，澳联储长期维持紧缩基调，压制了零售与消费者指数。",
         "Brazil": "政府预算赤字走高，拖累了巴西雷亚尔的汇率走势。与此同时，国际市场对于大豆和铁矿石大宗商品的短期需求放缓，提高了整个新兴拉丁美洲市盈率估值溢价。",
-        "Canada": "国际原油价格坚守在每桶78美元上方，大幅提振了加国核心能源信託基金。加拿大银行暗示通胀正迈入2%的目标区间，缓解了加国六大行所承受的加息折旧压力。"
+        "Canada": "国际原油价格坚守在每桶78美元上方，大幅提振了加国核心能源信託基金。加拿大银行暗示通胀正迈入2%的目标区间，缓解了加国六大行所承受的加息折旧压力。",
+        "Taiwan": "全球人工智能（AI）计算革命风起云涌，带动台湾顶尖高集成芯片技术供应链爆发性增长。本国外销畅旺，推动加权指数气压计呈现扎实的上升暖锋。"
       };
       return analysisMap[clean] || defaultAnalysis;
     }
   };
 
   const getLocalizedAlert = (country: string, defaultAlert: string | null) => {
+    const market = markets.find(m => m.country === country);
+    if (isZht && market && market.alertZht !== undefined) return market.alertZht;
+    if (isZh && market && market.alertZh !== undefined) return market.alertZh;
+
     if (!isZh && !isZht) return defaultAlert;
     if (!defaultAlert) return null;
     const clean = country.trim();
@@ -267,31 +280,79 @@ export default function App() {
     };
   };
 
-  // Load baseline markets on mount
+  // Load baseline markets on mount & set up 5-minute interactive radar sync countdown
   useEffect(() => {
     fetchMarkets();
   }, []);
 
-  const fetchMarkets = async () => {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          fetchMarketsSilent();
+          return 300; // Reset to 5 minutes
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchMarketsSilent = async () => {
     try {
-      setIsInitialLoading(true);
       const response = await fetch("/api/markets");
+      if (response.ok) {
+        const data = await response.json();
+        const updatedMarkets = data.markets || [];
+        setMarkets(updatedMarkets);
+        if (data.lastUpdatedTime) {
+          setLastSyncTime(data.lastUpdatedTime);
+        }
+        setSelectedCountry(prev => {
+          if (!prev) return null;
+          const fresh = updatedMarkets.find((m: MarketWeather) => m.country === prev.country);
+          return fresh || prev;
+        });
+      }
+    } catch (err) {
+      console.error("Silent sync failed:", err);
+    }
+  };
+
+  const fetchMarkets = async (isForce = false) => {
+    try {
+      if (isForce) {
+        setIsRefreshing(true);
+      } else {
+        setIsInitialLoading(true);
+      }
+      const response = await fetch(isForce ? "/api/markets?force=true" : "/api/markets");
       if (!response.ok) {
         throw new Error("Failed to contact meteorological master server.");
       }
       const data = await response.json();
       setMarkets(data.markets || []);
       setIsAiEnabled(data.isAiInteractive || false);
+      if (data.lastUpdatedTime) {
+        setLastSyncTime(data.lastUpdatedTime);
+      }
       
-      // Auto-set initial selected country (US if present, else first available)
+      // Auto-set initial selected country
       if (data.markets && data.markets.length > 0) {
-        const usMarket = data.markets.find((m: MarketWeather) => m.code === "US");
-        setSelectedCountry(usMarket || data.markets[0]);
+        setSelectedCountry(prev => {
+          if (prev) {
+            const fresh = data.markets.find((m: MarketWeather) => m.country === prev.country);
+            if (fresh) return fresh;
+          }
+          const usMarket = data.markets.find((m: MarketWeather) => m.code === "US");
+          return usMarket || data.markets[0];
+        });
       }
     } catch (error) {
       console.error("Baseline fetch failed:", error);
     } finally {
       setIsInitialLoading(false);
+      setIsRefreshing(false);
     }
   };
 
@@ -369,7 +430,7 @@ export default function App() {
     <div className="flex flex-col min-h-screen bg-slate-950 font-sans text-slate-100 selection:bg-indigo-650 selection:text-white" id="main_wrapper">
       {/* 1. Global Scrolling Market Ticker */}
       {!isInitialLoading && markets.length > 0 && (
-        <WeatherTicker markets={markets} onSelectCountry={(c) => setSelectedCountry(c)} />
+        <WeatherTicker markets={markets} onSelectCountry={(c) => setSelectedCountry(c)} locale={locale} />
       )}
 
       {/* 2. Top Header Navigation Bar */}
@@ -386,7 +447,7 @@ export default function App() {
                 MarketClimate
               </h1>
               <p className="text-xs text-slate-404 text-slate-400 uppercase tracking-widest font-semibold font-mono">
-                {isZh ? "全球经济天气预警与雷达指数" : "Global Economic Weather Forecast"}
+                {isZht ? "全球經濟天氣預警與雷達指數" : isZh ? "全球经济天气预警与雷达指数" : "Global Economic Weather Forecast"}
               </p>
             </div>
           </div>
@@ -394,15 +455,47 @@ export default function App() {
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <div className="hidden md:flex gap-6 items-center">
               <div className="text-right">
-                <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider font-mono">{isZh ? "微气象处理器状态" : "System Intel Status"}</div>
-                <div className="text-emerald-400 font-bold text-xs uppercase tracking-tight">{isZh ? "极轨道卫星天线运行" : "Active Satellite Feed"}</div>
+                <div className="text-[10px] text-slate-505 text-slate-500 uppercase font-bold tracking-wider font-mono">
+                  {isZht ? "微氣象處理器狀態" : isZh ? "微气象处理器状态" : "System Intel Status"}
+                </div>
+                <div className="text-emerald-400 font-bold text-xs uppercase tracking-tight">
+                  {isZht ? "極軌道衛星天線運行" : isZh ? "极轨道卫星天线运行" : "Active Satellite Feed"}
+                </div>
               </div>
               <div className="h-8 w-px bg-slate-850"></div>
               <div className="flex items-center gap-2 bg-slate-800/40 px-4 py-1.5 rounded-full border border-slate-800 text-xs font-medium text-slate-300">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                {isZh ? "实时遥测中" : "Live Scanning"}
+                {isZht ? "實時遙測中" : isZh ? "实时遥测中" : "Live Scanning"}
               </div>
             </div>
+
+            {lastSyncTime && (
+              <div className="flex flex-wrap gap-2 items-center">
+                <div className="flex items-center gap-2 bg-slate-900/60 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono text-emerald-400" title={isZht ? "數據基準：Investing.com & 玩股網 (WantGoo) 實時對流" : isZh ? "数据基准：Investing.com & 玩股网 (WantGoo) 实时对流" : "Data Authority: Investing.com & WantGoo Live Sync"}>
+                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+                  <span>
+                    {isZht 
+                      ? `Investing.com 基準實時：${new Date(lastSyncTime).toLocaleTimeString()}`
+                      : isZh
+                      ? `Investing.com 基準实时：${new Date(lastSyncTime).toLocaleTimeString()}`
+                      : `Investing.com Sync: ${new Date(lastSyncTime).toLocaleTimeString()}`
+                    }
+                  </span>
+                </div>
+                
+                <div className="flex items-center gap-1.5 bg-slate-900/65 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono text-blue-400" title={isZht ? "雷達自動重新探測剩餘時間" : "雷达自动重新探测剩余时间"}>
+                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
+                  <span>
+                    {isZht 
+                      ? `自動更新：${Math.floor(countdown / 60)}分${countdown % 60}秒`
+                      : isZh
+                      ? `自动更新：${Math.floor(countdown / 60)}分${countdown % 60}秒`
+                      : `Next Sync: ${Math.floor(countdown / 60)}m ${countdown % 60}s`
+                    }
+                  </span>
+                </div>
+              </div>
+            )}
 
             <div className="flex items-center gap-2">
               {/* Language Selector Pill Switcher */}
@@ -446,13 +539,13 @@ export default function App() {
               </button>
 
               <button
-                onClick={fetchMarkets}
-                disabled={isInitialLoading}
+                onClick={() => fetchMarkets(true)}
+                disabled={isInitialLoading || isRefreshing}
                 className="p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 hover:border-slate-750 transition-all cursor-pointer disabled:opacity-50"
-                title={isZh ? "重新标定全局气候" : "Recalibrate All Telemetry"}
+                title={isZht ? "按一次重置符號即可更新呈現在網路時間的資料" : isZh ? "按一次重置符号即可更新呈现在网络时间的资料" : "Sync live index data instantly from network time"}
                 id="recalibrate_trigger"
               >
-                <RotateCw size={14} className="text-emerald-400" />
+                <RotateCw size={14} className={`text-emerald-400 ${isRefreshing ? "animate-spin" : ""}`} />
               </button>
             </div>
           </div>
@@ -634,7 +727,7 @@ export default function App() {
                   <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                     <div>
                       <span className="px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold uppercase tracking-wider mb-6 inline-block">
-                        {isZh ? "推荐监测区域" : "Featured Met Region"} • {getFlagEmoji(selectedCountry.code)} {translateCountry(selectedCountry.country)}
+                        {isZht ? "推薦監測區域" : isZh ? "推荐监测区域" : "Featured Met Region"} • {getFlagEmoji(selectedCountry.code)} {translateCountry(selectedCountry.country)}
                       </span>
                       <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight font-display">
                         {translateIndex(selectedCountry.indexName)}
@@ -655,6 +748,27 @@ export default function App() {
                           {selectedCountry.indexChange >= 0 ? "+" : ""}{selectedCountry.indexChange}%
                         </div>
                       </div>
+
+                      {lastSyncTime && (
+                        <div className="text-[10px] text-white/70 font-mono mt-3 flex items-center gap-1.5">
+                          <span className="inline-block w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                          <span>
+                            {selectedCountry.country === "Taiwan" ? (
+                              isZht 
+                                ? `數據來源：玩股網 (WantGoo) 專家加權指數 & 台灣交易所實時同步於 ${new Date(lastSyncTime).toLocaleTimeString()}`
+                                : isZh
+                                ? `数据来源：玩股网 (WantGoo) 专家加权指数 & 台湾交易所实时同步于 ${new Date(lastSyncTime).toLocaleTimeString()}`
+                                : `Synced with WantGoo & TWSE Real-time Index Feed at ${new Date(lastSyncTime).toLocaleTimeString()}`
+                            ) : (
+                              isZht 
+                                ? `數據來源：雅虎財經 (實時同步於 ${new Date(lastSyncTime).toLocaleTimeString()})`
+                                : isZh
+                                ? `数据来源：雅虎财经 (实时同步于 ${new Date(lastSyncTime).toLocaleTimeString()})`
+                                : `Synced with Yahoo Finance at ${new Date(lastSyncTime).toLocaleTimeString()}`
+                            )}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-col items-center self-center md:self-end text-center shrink-0">
@@ -672,15 +786,15 @@ export default function App() {
                   </div>
 
                   {/* Horizontal Mini Forecast Track matching Design HTML */}
-                  <div className="mt-10 grid grid-cols-7 gap-2 z-10 relative" id="seven_day_mini_forecast">
-                    {selectedCountry.outlook7Day.map((dayItem, idx) => {
+                  <div className="mt-10 grid grid-cols-5 gap-2 z-10 relative" id="five_day_mini_forecast">
+                    {selectedCountry.outlook5Day.map((dayItem, idx) => {
                       const dayEmoji = 
                         dayItem.condition === "clear_skies" ? "☀️" :
                         dayItem.condition === "partly_cloudy" ? "⛅" :
                         dayItem.condition === "cloudy" ? "☁️" :
                         dayItem.condition === "rainy" ? "🌧️" : "⛈️";
                       
-                      const isMid = idx === 3; // Midweek highlight
+                      const isMid = idx === 2; // Midweek highlight (Wednesday in Mon-Fri)
                       const getLocalizedDay = (day: string) => {
                         if (!isZh) return day;
                         const map: Record<string, string> = {
@@ -826,8 +940,8 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* 7-day outlook chart (Recharts) */}
-                  <OutlookForecastChart data={selectedCountry.outlook7Day} isZh={isZh} />
+                  {/* 5-day outlook chart (Recharts) */}
+                  <OutlookForecastChart data={selectedCountry.outlook5Day} isZh={isZh} />
 
                   {/* Operational Action Panel */}
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 bg-slate-900/40 border border-slate-800 rounded-2xl">
