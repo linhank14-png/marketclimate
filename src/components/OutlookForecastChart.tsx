@@ -32,12 +32,12 @@ export default function OutlookForecastChart({ data, isZh = false }: OutlookFore
   const pressureKey = isZh ? "支撐氣壓 (hPa)" : "Support Pressure (hPa)";
   const humidityKey = isZh ? "情緒濕度 (VIX %)" : "Volatility Moisture (VIX %)";
 
+  const weekdaysShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const currentDayOfWeek = new Date().getDay();
-  const isWeekend = currentDayOfWeek === 0 || currentDayOfWeek === 6;
 
   const chartData = data.map((item, idx) => {
     const getLocalizedDay = (day: string) => {
-      const isToday = idx === 0 && !isWeekend;
+      const isToday = idx === 0 && item.day === weekdaysShort[currentDayOfWeek];
       if (isToday) {
         return isZh ? "今日" : "Today";
       }

@@ -1018,9 +1018,9 @@ export default function App() {
                         dayItem.condition === "cloudy" ? "☁️" :
                         dayItem.condition === "rainy" ? "🌧️" : "⛈️";
                       
+                      const weekdaysShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                       const currentDayOfWeek = new Date().getDay();
-                      const isWeekend = currentDayOfWeek === 0 || currentDayOfWeek === 6;
-                      const isToday = idx === 0 && !isWeekend; // Highlight current day (Today)
+                      const isToday = idx === 0 && dayItem.day === weekdaysShort[currentDayOfWeek]; // Highlight current day (Today)
                       const getLocalizedDay = (day: string) => {
                         if (isToday) {
                           return isZht ? "今日" : isZh ? "今日" : "Today";

@@ -1178,7 +1178,8 @@ const TRANSLATED_SYMBOL_MAP: Record<string, string> = {
   "^EGX30": "^CASE30",
   "^WIG20": "WIG20.WA",
   "^PSEI": "PSEI.PS",
-  "^VNINDEX": "VNM"
+  "^VNINDEX": "VNM",
+  "^COLCAP": "^737809-COP-STRD"
 };
 
 const REVERSE_TRANSLATED_SYMBOL_MAP: Record<string, string> = {};
@@ -1213,6 +1214,9 @@ async function fetchChartQuote(symbol: string): Promise<{ price: number; changeP
 
       if (symbol === "^VNINDEX") {
         price = parseFloat((price * 66.16).toFixed(2));
+      }
+      if (symbol === "^COLCAP") {
+        price = parseFloat((price * 0.67).toFixed(2));
       }
       return { price, changePercent };
     }
@@ -1320,6 +1324,9 @@ async function fetchYahooFinanceQuotes() {
 
           if (symbol === "^VNINDEX" && typeof price === "number") {
             price = parseFloat((price * 66.16).toFixed(2));
+          }
+          if (symbol === "^COLCAP" && typeof price === "number") {
+            price = parseFloat((price * 0.67).toFixed(2));
           }
 
           if (typeof price === "number" && typeof changePercent === "number") {
