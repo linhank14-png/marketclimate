@@ -16,6 +16,7 @@ interface ClimateInstrumentProps {
   icon: ReactNode;
   description: string;
   id?: string;
+  extraInfo?: ReactNode;
 }
 
 export default function ClimateInstrument({
@@ -28,6 +29,7 @@ export default function ClimateInstrument({
   icon,
   description,
   id,
+  extraInfo,
 }: ClimateInstrumentProps) {
   const themes = {
     amber: {
@@ -97,9 +99,15 @@ export default function ClimateInstrument({
         />
       </div>
 
-      <p className="text-[11px] text-slate-450 mt-2.5 leading-relaxed font-sans">
+      <p className="text-[11px] text-slate-400 mt-2.5 leading-relaxed font-sans">
         {description}
       </p>
+
+      {extraInfo && (
+        <div className="mt-3 pt-2.5 border-t border-slate-800/60 text-[10px] font-mono select-none flex flex-col gap-1">
+          {extraInfo}
+        </div>
+      )}
     </div>
   );
 }

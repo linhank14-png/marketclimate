@@ -30,6 +30,7 @@ import ClimateInstrument from "./components/ClimateInstrument";
 import WeatherTicker from "./components/WeatherTicker";
 import SatelliteSearch from "./components/SatelliteSearch";
 import OutlookForecastChart from "./components/OutlookForecastChart";
+import { deriveFinancialMetrics } from "./utils/baselines";
 
 export default function App() {
   // Localization State
@@ -58,6 +59,15 @@ export default function App() {
   const [filterCondition, setFilterCondition] = useState<WeatherCondition | "all">("all");
   const [showGuideModal, setShowGuideModal] = useState(false);
 
+  // Derive quantitative financial baseline metrics for the selected country
+  const metrics = selectedCountry ? deriveFinancialMetrics(
+    selectedCountry.code,
+    selectedCountry.temperature,
+    selectedCountry.pressure,
+    selectedCountry.humidity,
+    selectedCountry.windSpeed
+  ) : null;
+
   // Core Mappings & Translations
   const translateCountry = (country: string) => {
     if (!isZh && !isZht) return country;
@@ -77,10 +87,32 @@ export default function App() {
       "South Korea": isZht ? "韓國" : "韩国",
       "Singapore": isZht ? "新加坡" : "新加坡",
       "Taiwan": isZht ? "台灣" : "台湾",
+      "Saudi Arabia": isZht ? "沙烏地阿拉伯" : "沙特阿拉伯",
+      "Malaysia": isZht ? "馬來西亞" : "马来西亚",
+      "Indonesia": isZht ? "印尼" : "印尼",
+      "Thailand": isZht ? "泰國" : "泰国",
       "Mexico": isZht ? "墨西哥" : "墨西哥",
-      "Russia": isZht ? "俄羅斯" : "俄罗斯",
-      "South Africa": isZht ? "南非" : "南非",
+      "Argentina": isZht ? "阿根廷" : "阿根廷",
+      "Chile": isZht ? "智利" : "智利",
+      "Colombia": isZht ? "哥倫比亞" : "哥伦比亚",
+      "Peru": isZht ? "秘魯" : "秘鲁",
       "Italy": isZht ? "義大利" : "意大利",
+      "Spain": isZht ? "西班牙" : "西班牙",
+      "Netherlands": isZht ? "荷蘭" : "荷兰",
+      "Belgium": isZht ? "比利時" : "比利时",
+      "Sweden": isZht ? "瑞典" : "瑞典",
+      "Russia": isZht ? "俄羅斯" : "俄罗斯",
+      "Turkey": isZht ? "土耳其" : "土耳其",
+      "South Africa": isZht ? "南非" : "南非",
+      "Egypt": isZht ? "埃及" : "埃及",
+      "United Arab Emirates": isZht ? "阿聯酋" : "阿联酋",
+      "Poland": isZht ? "波蘭" : "波兰",
+      "Austria": isZht ? "奧地利" : "奥地利",
+      "Hong Kong": isZht ? "香港" : "香港",
+      "Philippines": isZht ? "菲律賓" : "菲律宾",
+      "Vietnam": isZht ? "越南" : "越南",
+      "New Zealand": isZht ? "紐西蘭" : "新西兰",
+      "Pakistan": isZht ? "巴基斯坦" : "巴基斯坦"
     };
     return map[country] || country;
   };
@@ -102,6 +134,34 @@ export default function App() {
       "S&P/TSX Composite": isZht ? "加拿大S&P/TSX綜合指數" : "加拿大S&P/TSX综合指数",
       "SMI": isZht ? "瑞士SMI指數" : "瑞士SMI指数",
       "TAIEX": isZht ? "臺灣加權指數" : "台湾加权指数",
+      "KOSPI": isZht ? "南韓綜合指數" : "南韩综合指数",
+      "Straits Times Index (STI)": isZht ? "新加坡海峽時報指數" : "新加坡海峡时报指数",
+      "Tadawul All Share Index (TASI)": isZht ? "沙特TASI指數" : "沙特TASI指数",
+      "FTSE Bursa Malaysia KLCI": isZht ? "馬來西亞吉隆坡指數" : "马来西亚吉隆坡指数",
+      "IDX Composite": isZht ? "印尼綜合指數" : "印尼综合指数",
+      "SET Index": isZht ? "泰國SET指數" : "泰国SET指数",
+      "S&P/BMV IPC": isZht ? "墨西哥IPC指數" : "墨西哥IPC指数",
+      "S&P Merval": isZht ? "阿根廷Merval指數" : "阿根廷Merval指数",
+      "IPSA Chile": isZht ? "智利IPSA指數" : "智利IPSA指数",
+      "COLCAP": isZht ? "哥倫比亞COLCAP指數" : "哥伦比亚COLCAP指数",
+      "S&P/BVL General": isZht ? "秘魯BVL指數" : "秘鲁BVL指数",
+      "FTSE MIB": isZht ? "意大利MIB指數" : "意大利MIB指数",
+      "IBEX 35": isZht ? "西班牙IBEX 35指數" : "西班牙IBEX 35指数",
+      "AEX": isZht ? "荷蘭AEX指數" : "荷兰AEX指数",
+      "BEL 20": isZht ? "比利時BEL 20指數" : "比利时BEL 20指数",
+      "OMX Stockholm 30": isZht ? "瑞典OMXS30指數" : "瑞典OMXS30指数",
+      "MOEX Russia Index": isZht ? "俄羅斯MOEX指數" : "俄罗斯MOEX指数",
+      "BIST 100": isZht ? "土耳其BIST 100指數" : "土耳其BIST 100指数",
+      "JSE Top 40": isZht ? "南非JSE 40指數" : "南非JSE 40指数",
+      "EGX 30": isZht ? "埃及EGX 30指數" : "埃及EGX 30指数",
+      "DFM General Index": isZht ? "迪拜DFM綜合指數" : "迪拜DFM综合指数",
+      "WIG20": isZht ? "波蘭WIG20指數" : "波兰WIG20指数",
+      "ATX": isZht ? "奧地利ATX指數" : "奥地利ATX指数",
+      "Hang Seng Index": isZht ? "恒生指數" : "恒生指数",
+      "PSEi": isZht ? "菲律賓PSEi指數" : "菲律宾PSEi指数",
+      "VN-Index": isZht ? "越南VN-Index指數" : "越南VN-Index指数",
+      "NZX 50": isZht ? "新西蘭NZX 50指數" : "新西兰NZX 50指数",
+      "KSE 100": isZht ? "巴基斯坦KSE 100指數" : "巴基斯坦KSE 100指数"
     };
     return map[index] || index;
   };
@@ -759,6 +819,106 @@ export default function App() {
 
           {/* RIGHT SIDE PANEL - Focus Meteorological Station (65% width) */}
           <section className="flex-1 flex flex-col gap-6" id="focus_station">
+            
+            {/* 🌎 Global Financial Meteorology Comparison Board Grid */}
+            <div className="bg-slate-900/40 border border-slate-800/80 rounded-3xl p-5 shadow-xl flex flex-col gap-4" id="global_climate_comparison_card">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/60 pb-3">
+                <div>
+                  <span className="text-[10px] text-indigo-400 font-mono font-bold tracking-widest uppercase block mb-0.5">
+                    {isZht ? "全地域航道監測" : isZh ? "全地域航道监测" : "CONTINENT CLIMATE MATRIX"}
+                  </span>
+                  <h3 className="text-base font-black text-white font-display flex items-center gap-2">
+                    <Compass className="text-sky-400 shrink-0" size={18} />
+                    <span>
+                      {isZht ? "全球金融氣候分布矩陣" : isZh ? "全球金融气候分布矩阵" : "Global Financial Climate Matrix Board"}
+                    </span>
+                  </h3>
+                  <p className="text-[11px] text-slate-400 mt-0.5">
+                    {isZht 
+                      ? "對比各主權板塊「溫標（估值市盈率）」與「氣相（多空心態）」。點擊快速重調探測站定位。"
+                      : isZh
+                      ? "对比各主权板块“温标（估值市盈率）”与“气相（多空心态）”。点击快速重调探测站定位。"
+                      : "Spatially compare sovereign valuation temps (PE level) and market atmosphere climates. Click to lock tracking."
+                    }
+                  </p>
+                </div>
+                <div className="text-[10px] bg-slate-950 px-2.5 py-1 rounded-md border border-slate-850 font-mono font-bold text-slate-400 shrink-0 self-start sm:self-center">
+                  Investing.com {isZh ? "航道格點" : "Network Grid"}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[
+                  {
+                    id: "americas",
+                    title: isZht ? "🌎 美洲氣區" : isZh ? "🌎 美洲气区" : "🌎 Americas Zone",
+                    codes: ["US", "CA", "BR", "MX", "AR", "CL", "CO", "PE"]
+                  },
+                  {
+                    id: "europe_mideast",
+                    title: isZht ? "🌍 歐非中東氣區" : isZh ? "🌍 欧非中东气区" : "🌍 Europe & Mideast",
+                    codes: ["DE", "GB", "FR", "CH", "IT", "ES", "NL", "BE", "SE", "RU", "TR", "ZA", "SA", "EG", "AE", "PL", "AT"]
+                  },
+                  {
+                    id: "asiapacific",
+                    title: isZht ? "🌏 亞太及新興板塊" : isZh ? "🌏 亚太及新兴板块" : "🌏 Asia-Pacific Zone",
+                    codes: ["JP", "TW", "KR", "CN", "HK", "IN", "SG", "MY", "ID", "TH", "PH", "VN", "NZ", "AU", "PK"]
+                  }
+                ].map((zone) => {
+                  return (
+                    <div key={zone.id} className="bg-slate-950/30 border border-slate-850 p-3 rounded-2xl flex flex-col gap-2">
+                      <h4 className="text-[10px] font-bold text-slate-350 border-b border-slate-800 pb-1.5 font-mono uppercase tracking-wider flex justify-between items-center">
+                        <span>{zone.title}</span>
+                        <span className="text-[9px] text-slate-500 font-normal">({zone.codes.length} {isZh ? "監測" : "Grid"})</span>
+                      </h4>
+                      <div className="flex flex-col gap-1.5">
+                        {zone.codes.map((code) => {
+                          const m = markets.find((item) => item.code.toUpperCase() === code.toUpperCase());
+                          if (!m) return null;
+                          const condEmoji = 
+                            m.condition === "clear_skies" ? "☀️" :
+                            m.condition === "partly_cloudy" ? "⛅" :
+                            m.condition === "cloudy" ? "☁️" :
+                            m.condition === "rainy" ? "🌧️" : "⛈️";
+
+                          const isSelected = selectedCountry?.code === m.code;
+
+                          return (
+                            <button
+                              key={code}
+                              onClick={() => setSelectedCountry(m)}
+                              className={`w-full text-left p-2 rounded-xl border flex items-center justify-between text-xs transition-all cursor-pointer ${
+                                isSelected 
+                                  ? "bg-blue-600/10 border-blue-500/70 shadow-sm font-bold scale-[1.01]" 
+                                  : "bg-slate-900/20 border-slate-800/60 hover:border-slate-700/80 hover:bg-slate-900/50"
+                              }`}
+                            >
+                              <div className="flex items-center gap-1.5 overflow-hidden truncate">
+                                <span className="text-xs select-none shrink-0">{getFlagEmoji(m.code)}</span>
+                                <span className="text-slate-200 truncate font-sans text-[11px]">
+                                  {translateCountry(m.country)}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-1.5 shrink-0 font-mono text-[10px]">
+                                <span className="text-xs select-none" title={m.condition}>{condEmoji}</span>
+                                <span className={`px-1.5 py-0.5 rounded font-black ${
+                                  m.indexChange >= 0 
+                                    ? "bg-emerald-950/40 text-emerald-400 border border-emerald-950" 
+                                    : "bg-rose-950/40 text-rose-400 border border-rose-950"
+                                }`}>
+                                  {m.indexChange >= 0 ? "+" : ""}{m.indexChange}%
+                                </span>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             {selectedCountry ? (
               <div className="bg-slate-900/50 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col h-full" id="focus_station_card">
                 
@@ -792,8 +952,23 @@ export default function App() {
                           {getLocalizedWeatherMetadata(selectedCountry.condition).label}
                         </span>
                       </h2>
+
+                      {/* Decoded Financial Weather Core Meanings */}
+                      <div className="mt-3.5 px-3.5 py-2 bg-black/35 backdrop-blur-md rounded-xl border border-white/10 text-white/95 text-xs max-w-xl shadow-lg leading-relaxed font-sans">
+                        <div className="font-bold flex items-center gap-1 text-cyan-300 text-[10px] uppercase tracking-wider mb-0.5 font-mono">
+                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                          {isZht ? "氣候形態學轉譯" : isZh ? "气候形态学转译" : "Financial Climatology Decoded"}
+                        </div>
+                        <p className="text-[11px] font-medium text-white/90">
+                          {selectedCountry.condition === "clear_skies" && (isZht ? "「晴空萬里」代表市場买气極旺，估值高溫（本益比偏貴），資金大量且迅速湧入！" : isZh ? "「晴空万里」代表市场买气极旺，估值高温（本益比偏贵），资金大量且迅速涌入！" : "Clear Skies → Extremely Bullish condition. High P/E temp, intense buying waves, and massive capital inflows.")}
+                          {selectedCountry.condition === "partly_cloudy" && (isZht ? "「晴間多雲」代表基本面慢牛平穩，大氣底色看漲，雖有局部微雨盤整，但大盤健康上揚。" : isZh ? "「晴间多云」代表基本面慢牛平稳，大气底色看涨，虽有局部微雨盘整，但大盘健康上扬。" : "Partly Cloudy → Moderately Bullish. Stable macroeconomic growth, mild consolidated headwinds, slow-bull support.")}
+                          {selectedCountry.condition === "cloudy" && (isZht ? "「陰天多雲」代表市場方向不明，資金觀望情緒濃厚，波動率中性，大盤無序窄幅橫盤。" : isZh ? "「阴天多云」代表市场方向不明，资金观望情绪浓厚，波动率中性，大盘无序窄幅横盘。" : "Cloudy → Neutral or Sideways rangebound drift. Low momentum and high market indecision.")}
+                          {selectedCountry.condition === "rainy" && (isZht ? "「陰雨綿綿」代表宏觀利空（升息或出口降溫）帶來冷空氣，信心減退，外資與機構局部撤回資金。" : isZh ? "「阴雨绵绵」代表宏观利空（升息或出口降温）带来冷空气，信心减退，外资与机构局部撤回资金。" : "Rainy → Moderately Bearish capital outflows. Weakening earnings or hawkish macro shifts drive defensive retreats.")}
+                          {selectedCountry.condition === "thunderstorms" && (isZht ? "「雷暴降臨」代表流動性斷裂或信用爆雷致強對流，恐慌性踩踏砸盤爆發，資金急奔避險。" : isZh ? "「雷暴降临」代表流动性断裂或信用爆雷致强对流，恐慌性踩踏砸盘爆发，资金急奔避险。" : "Thunderstorms → Strongly Bearish. Structural panic selloff, severe systemic volatility, rapid flight to safety.")}
+                        </p>
+                      </div>
                       
-                      <div className="mt-8 flex items-end gap-3 flex-wrap">
+                      <div className="mt-6 flex items-end gap-3 flex-wrap">
                         <span className="text-5xl sm:text-6xl font-light text-white font-mono tracking-tight leading-none" id="focused_index_value">
                           {selectedCountry.indexValue.toLocaleString(undefined, { minimumFractionDigits: 1 })}
                         </span>
@@ -806,7 +981,7 @@ export default function App() {
                       </div>
 
                       {lastSyncTime && (
-                        <div className="text-[10px] text-white/70 font-mono mt-3 flex items-center gap-1.5">
+                        <div className="text-[10px] text-white/70 font-mono mt-3 flex items-center gap-1.5 bg-black/15 backdrop-blur-sm py-1 px-2.5 rounded-lg border border-white/5 inline-flex">
                           <span className="inline-block w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
                           <span>
                             {isZht 
@@ -843,14 +1018,22 @@ export default function App() {
                         dayItem.condition === "cloudy" ? "☁️" :
                         dayItem.condition === "rainy" ? "🌧️" : "⛈️";
                       
-                      const isToday = idx === 0; // Highlight current day (Today)
+                      const currentDayOfWeek = new Date().getDay();
+                      const isWeekend = currentDayOfWeek === 0 || currentDayOfWeek === 6;
+                      const isToday = idx === 0 && !isWeekend; // Highlight current day (Today)
                       const getLocalizedDay = (day: string) => {
-                        if (idx === 0) {
+                        if (isToday) {
                           return isZht ? "今日" : isZh ? "今日" : "Today";
                         }
-                        if (!isZh) return day;
+                        if (!isZh && !isZht) return day;
                         const map: Record<string, string> = {
-                          "Mon": "周一", "Tue": "周二", "Wed": "周三", "Thu": "周四", "Fri": "周五", "Sat": "周六", "Sun": "周日"
+                          "Mon": isZht ? "週一" : "周一",
+                          "Tue": isZht ? "週二" : "周二",
+                          "Wed": isZht ? "週三" : "周三",
+                          "Thu": isZht ? "週四" : "周四",
+                          "Fri": isZht ? "週五" : "周五",
+                          "Sat": isZht ? "週六" : "周六",
+                          "Sun": isZht ? "週日" : "周日"
                         };
                         return map[day] || day;
                       };
@@ -893,68 +1076,140 @@ export default function App() {
                   
                   {/* Climate Instruments Grid */}
                   <div>
-                    <h3 className="text-xs uppercase tracking-wider text-slate-400 font-mono mb-3">
-                      {isZh ? "金融气候仪表雷达方阵" : "Atmospheric Gauge Array"}
+                    <h3 className="text-xs uppercase tracking-wider text-slate-400 font-mono mb-3 font-bold">
+                      {isZht ? "金融氣候主機儀表雷達矩陣" : isZh ? "金融气候主机仪表雷达矩阵" : "Atmospheric Gauge Array"}
                     </h3>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" id="instruments_grid">
                       {/* 1. Temp (Valuation P/E Gauge) */}
                       <ClimateInstrument
-                        label={isZh ? "温感热力值" : "Thermal Metrics"}
-                        financialMeasure={isZh ? "大盘市盈率估值温度 (PE)" : "Market Valuation P/E"}
+                        label={isZht ? "估值溫感熱力值" : isZh ? "估值温感热力值" : "Thermal Metrics"}
+                        financialMeasure={isZht ? "大盤市盈率估值溫度 (PE)" : isZh ? "大盘市盈率估值温度 (PE)" : "Market Valuation P/E"}
                         value={`${selectedCountry.temperature}°`}
                         unit={isZh ? "摄氏温标" : "C Scale"}
                         percentage={(selectedCountry.temperature / 40) * 105}
                         theme={selectedCountry.temperature > 28 ? "rose" : selectedCountry.temperature < 12 ? "blue" : "amber"}
                         icon={<Thermometer size={16} />}
-                        description={isZh 
-                          ? "映射资产定价充沛感。超买买气引发极端高空温热（>28°C），估值低廉则下跌进入局部冰冻或负温气流。" 
-                          : "Represents asset pricing temperature. Over-expansionary buy rushes create extreme hot airwaves (>28°C), while cheap valuations drop into freezing drafts."}
+                        description={
+                          isZht ? "本益比(PE)定標：🥶 <12°C 寒冷(低估便宜) | 🍦 12-18°C 溫和(合理) | ☀️ 18-25°C 炎熱(偏高) | 🔥 >25°C 酷暑(泡沫警戒)。越灼熱估值溢價越高。" :
+                          isZh ? "本益比(PE)定标：🥶 <12°C 寒冷(低估便宜) | 🍦 12-18°C 温和(合理) | ☀️ 18-25°C 药箱(偏高) | 🔥 >25°C 酷暑(泡沫经典)。越灼热估值溢价越高。" :
+                          "PE valuation temp: 🥶 <12°C Cold (Oversold/Cheap) | 🍦 12-18°C Normal (Fair) | ☀️ 18-25°C Warm (High Valuation) | 🔥 >25°C Scorching (Bubble Risk)."
+                        }
+                        extraInfo={
+                          metrics ? (
+                            <div className="flex justify-between items-center text-[10px] text-slate-400 font-mono">
+                              <span>
+                                {isZht ? "歷史中樞基準：" : isZh ? "历史中枢基准：" : "Sovereign Baseline: "}
+                                <strong className="text-slate-200">{metrics.peBaseline}x PE</strong>
+                              </span>
+                              <span>
+                                {isZht ? "當前隱含 P/E：" : isZh ? "当前隐含 P/E：" : "Implied P/E: "}
+                                <strong className={metrics.peRateChange >= 0 ? "text-amber-400 font-extrabold" : "text-sky-400 font-extrabold"}>
+                                  {metrics.impliedPE}x ({metrics.peRateChange >= 0 ? "+" : ""}{metrics.peRateChange}%)
+                                </strong>
+                              </span>
+                            </div>
+                          ) : null
+                        }
                         id="gauge_temperature"
                       />
 
                       {/* 2. Index Barometric Pressure */}
                       <ClimateInstrument
-                        label={isZh ? "气旋势图系统" : "Barometric Systems"}
-                        financialMeasure={isZh ? "股指大盘支撑气压 (Pres)" : "Index Air Pressure"}
+                        label={isZht ? "大氣支撐氣壓系統" : isZh ? "大气支撑气压系统" : "Barometric Systems"}
+                        financialMeasure={isZht ? "股指大盤支撐強度 (Pres)" : isZh ? "股指大盘支撑强度 (Pres)" : "Index Air Pressure"}
                         value={selectedCountry.pressure}
                         unit="hPa"
                         percentage={((selectedCountry.pressure - 980) / 60) * 100}
                         theme="emerald"
                         icon={<Gauge size={16} />}
-                        description={isZh 
-                          ? "体现市场系统动力支撑度。高气压势（>1013hPa）维持晴空横盘或震荡上攀；低空强气流对流则引来暴风雨。" 
-                          : "Expresses systemic momentum & barometric force. High pressure (>1013hPa) produces calm, buoyant bullish skies; low pressures trigger stormy winds."}
+                        description={
+                          isZht ? "支撐氣壓(Pres)定標：🌀 <1000 低壓(空頭肆虐) | ☁️ 1000-1010 弱低壓(盤整) | ☀️ 1010-1020 常壓(多頭平穩) | 🏔️ >1020 強高壓(避風港護體)。低壓引發暴風雨。" :
+                          isZh ? "支撑气压(Pres)定标：🌀 <1000 低压(空头肆虐) | ☁️ 1000-1010 弱低压(盘整) | ☀️ 1010-1020 常压(多头平稳) | 🏔️ >1020 强高压(避风港体)。低压引发暴风雨。" :
+                          "Barometric strength: 🌀 <1000 Low (Bear market gales) | ☁️ 1000-1010 Weak (Consolidation) | ☀️ 1010-1020 Active (Bullish sky) | 🏔️ >1020 Strong High (Robust Support)."
+                        }
+                        extraInfo={
+                          metrics ? (
+                            <div className="flex justify-between items-center text-[10px] text-slate-400 font-mono">
+                              <span>
+                                {isZht ? "海平面標準常壓：" : isZh ? "海平面标准常压：" : "Sea-Level Standard: "}
+                                <strong className="text-slate-200">1013 hPa</strong>
+                              </span>
+                              <span>
+                                {isZht ? "偏離 200日均線：" : isZh ? "偏离 200日均线：" : "vs 200-day EMA: "}
+                                <strong className={metrics.indexVs200EMA >= 100 ? "text-emerald-400 font-extrabold" : "text-rose-400 font-extrabold"}>
+                                  {metrics.indexVs200EMA > 100 ? "+" : ""}{(metrics.indexVs200EMA - 100).toFixed(1)}% ({metrics.indexVs200EMA}%)
+                                </strong>
+                              </span>
+                            </div>
+                          ) : null
+                        }
                         id="gauge_pressure"
                       />
 
                       {/* 3. VIX Humidity */}
                       <ClimateInstrument
-                        label={isZh ? "电离层空气湿度" : "Moisture Saturation"}
-                        financialMeasure={isZh ? "恐慌情绪波动湿度 (VIX)" : "Volatility Humidity (VIX)"}
+                        label={isZht ? "恐慌分子空氣濕度" : isZh ? "恐慌分子空气湿度" : "Moisture Saturation"}
+                        financialMeasure={isZht ? "恐慌情緒波動濕度 (VIX)" : isZh ? "恐慌情绪波动湿度 (VIX)" : "Volatility Humidity (VIX)"}
                         value={`${selectedCountry.humidity}%`}
                         unit={isZh ? "波幅单位" : "VIX Index"}
                         percentage={selectedCountry.humidity}
                         theme="blue"
                         icon={<Droplets size={16} />}
-                        description={isZh 
-                          ? "空气湿度正比于大盘恐慌波幅（VIX）。水分饱和（湿度>60%）是酝酿剧烈结构性变盘和极端冰雹的催化剂。" 
-                          : "Equivalent to VIX. High relative moisture saturation (>60% humidity) signifies massive storm potential and volatility breed grounds."}
+                        description={
+                          isZht ? "波動濕度(VIX)定標：🏜️ <15% 乾燥(平穩安逸) | ⛅ 15-25% 適度(正常) | 🌧️ 25-40% 潮濕(敏感起風) | ⛈️ >40% 飽和暴雨(極度恐慌)。濕度愈大，變盤砸盤突襲愈大。" :
+                          isZh ? "波动湿度(VIX)定标：🏜️ <15% 干燥(平稳安逸) | ⛅ 15-25% 适度(正常) | 🌧️ 25-40% 潮湿(敏感起风) | ⛈️ >40% 饱和暴雨(极度恐慌)。湿度愈大，变盘砸盘突袭愈大。" :
+                          "Volatility humidity (VIX): 🏜️ <15% Dry (Overconfident) | ⛅ 15-25% Comfortable (Stable) | 🌧️ 25-40% Moist (Sensitive) | ⛈️ >40% Rainy (Panic selloff)."
+                        }
+                        extraInfo={
+                          metrics ? (
+                            <div className="flex justify-between items-center text-[10px] text-slate-400 font-mono">
+                              <span>
+                                {isZht ? "平季波動基準：" : isZh ? "平季波动基准：" : "Sovereign VIX Base: "}
+                                <strong className="text-slate-200">{metrics.vixBaseline}% VIX</strong>
+                              </span>
+                              <span>
+                                {isZht ? "當前隱含波動率：" : isZh ? "当前隐含波动率：" : "Implied VIX: "}
+                                <strong className={metrics.impliedVIX >= metrics.vixBaseline ? "text-rose-400 font-extrabold" : "text-blue-400 font-extrabold"}>
+                                  {metrics.impliedVIX}% VIX
+                                </strong>
+                              </span>
+                            </div>
+                          ) : null
+                        }
                         id="gauge_humidity"
                       />
 
                       {/* 4. volume wind speed */}
                       <ClimateInstrument
-                        label={isZh ? "多空资金流速" : "Kinetic Velocity"}
-                        financialMeasure={isZh ? "席位成交总信风速 (Vol)" : "Trade Gale Wind Speed"}
+                        label={isZht ? "多空換手資金風速" : isZh ? "多空换手资金风速" : "Kinetic Velocity"}
+                        financialMeasure={isZht ? "席位成交動能風速 (Vol)" : isZh ? "席位成交动能风速 (Vol)" : "Trade Gale Wind Speed"}
                         value={`${selectedCountry.windSpeed}`}
                         unit="km/h"
                         percentage={(selectedCountry.windSpeed / 80) * 100}
                         theme="slate"
                         icon={<Wind size={16} />}
-                        description={isZh 
-                          ? "指示30日平均成交换手量风速。多空大风（>45 km/h）表示主要席位资金正在剧烈多空转换、清盘或顺风流入。" 
-                          : "Represents 30-day average trading volume speeds. Gale-force gale winds (>45 km/h) reflect heavy institutional liquidity liquidations or storm inflows."}
+                        description={
+                          isZht ? "資金風速(VOL成交速)定標：🍃 <12 微風(低估量縮) | 💨 12-30 順風(交易適中) | 🌊 30-48 強風(主力調倉) | 🌪️ >48 颶風(極端拋售放浪/狂熱追高)。" :
+                          isZh ? "资金风速(VOL成交速)定标：🍃 <12 微风(低估量缩) | 💨 12-30 顺风(交易适中) | 🌊 30-48 强风(主力调仓) | 🌪️ >48 Hurricane (极端抛售放浪/狂热追高)。" :
+                          "Trading gale wind (VOL): 🍃 <12 Breeze (Rangebound shrinkage) | 💨 12-30 Gentle (Healthy) | 🌊 30-48 Heavy Gale (Fund rotates) | 🌪️ >48 Hurricane (Violent trade volumes)."
+                        }
+                        extraInfo={
+                          metrics ? (
+                            <div className="flex justify-between items-center text-[10px] text-slate-400 font-mono">
+                              <span>
+                                {isZht ? "日均成交基盤：" : isZh ? "日均成交基盘：" : "Vol Benchmark: "}
+                                <strong className="text-slate-200">{metrics.volumeBaseline} {metrics.volumeUnit === "Shares" ? (isZh || isZht ? "股" : "Shs") : (isZht ? "元" : isZh ? "元" : metrics.volumeUnit)}</strong>
+                              </span>
+                              <span>
+                                {isZht ? "換手動能倍率：" : isZh ? "换手动能倍率：" : "Volume Multiplier: "}
+                                <strong className="text-amber-400 font-extrabold">
+                                  {metrics.impliedVolumePercent}% ({metrics.volMultiplier.toFixed(1)}x)
+                                </strong>
+                              </span>
+                            </div>
+                          ) : null
+                        }
                         id="gauge_wind"
                       />
                     </div>

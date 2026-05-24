@@ -632,6 +632,374 @@ let marketCache: MarketWeather[] = [
     summary: "",
     economicAnalysis: "",
     outlook5Day: []
+  },
+  {
+    country: "Mexico",
+    code: "MX",
+    indexName: "S&P/BMV IPC",
+    indexValue: 56120.30,
+    indexChange: 0.15,
+    condition: "partly_cloudy",
+    temperature: 21,
+    pressure: 1013,
+    humidity: 35,
+    windSpeed: 18,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Argentina",
+    code: "AR",
+    indexName: "S&P Merval",
+    indexValue: 1240250.00,
+    indexChange: 1.45,
+    condition: "clear_skies",
+    temperature: 14,
+    pressure: 1022,
+    humidity: 16,
+    windSpeed: 35,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Chile",
+    code: "CL",
+    indexName: "IPSA Chile",
+    indexValue: 6512.40,
+    indexChange: 0.22,
+    condition: "partly_cloudy",
+    temperature: 16,
+    pressure: 1014,
+    humidity: 26,
+    windSpeed: 19,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Colombia",
+    code: "CO",
+    indexName: "COLCAP",
+    indexValue: 1395.10,
+    indexChange: -0.12,
+    condition: "cloudy",
+    temperature: 22,
+    pressure: 1010,
+    humidity: 42,
+    windSpeed: 18,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Peru",
+    code: "PE",
+    indexName: "S&P/BVL General",
+    indexValue: 28410.20,
+    indexChange: 0.35,
+    condition: "partly_cloudy",
+    temperature: 18,
+    pressure: 1014,
+    humidity: 38,
+    windSpeed: 19,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Switzerland",
+    code: "CH",
+    indexName: "SMI",
+    indexValue: 11840.20,
+    indexChange: 0.45,
+    condition: "partly_cloudy",
+    temperature: 12,
+    pressure: 1015,
+    humidity: 21,
+    windSpeed: 21,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Italy",
+    code: "IT",
+    indexName: "FTSE MIB",
+    indexValue: 34120.10,
+    indexChange: 0.75,
+    condition: "partly_cloudy",
+    temperature: 19,
+    pressure: 1016,
+    humidity: 28,
+    windSpeed: 24,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Spain",
+    code: "ES",
+    indexName: "IBEX 35",
+    indexValue: 11210.30,
+    indexChange: 0.85,
+    condition: "partly_cloudy",
+    temperature: 20,
+    pressure: 1018,
+    humidity: 32,
+    windSpeed: 34,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Netherlands",
+    code: "NL",
+    indexName: "AEX",
+    indexValue: 915.20,
+    indexChange: 0.52,
+    condition: "partly_cloudy",
+    temperature: 14,
+    pressure: 1014,
+    humidity: 38,
+    windSpeed: 19,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Belgium",
+    code: "BE",
+    indexName: "BEL 20",
+    indexValue: 3912.40,
+    indexChange: 0.15,
+    condition: "partly_cloudy",
+    temperature: 14,
+    pressure: 1014,
+    humidity: 42,
+    windSpeed: 16,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Sweden",
+    code: "SE",
+    indexName: "OMX Stockholm 30",
+    indexValue: 2612.30,
+    indexChange: 0.35,
+    condition: "partly_cloudy",
+    temperature: 11,
+    pressure: 1014,
+    humidity: 38,
+    windSpeed: 19,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Russia",
+    code: "RU",
+    indexName: "MOEX Russia Index",
+    indexValue: 3120.50,
+    indexChange: -1.25,
+    condition: "rainy",
+    temperature: 6,
+    pressure: 1004,
+    humidity: 58,
+    windSpeed: 23,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Turkey",
+    code: "TR",
+    indexName: "BIST 100",
+    indexValue: 10240.50,
+    indexChange: 1.85,
+    condition: "clear_skies",
+    temperature: 17,
+    pressure: 1024,
+    humidity: 14,
+    windSpeed: 38,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "South Africa",
+    code: "ZA",
+    indexName: "JSE Top 40",
+    indexValue: 71490.60,
+    indexChange: 0.42,
+    condition: "partly_cloudy",
+    temperature: 18,
+    pressure: 1014,
+    humidity: 38,
+    windSpeed: 19,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Egypt",
+    code: "EG",
+    indexName: "EGX 30",
+    indexValue: 26140.20,
+    indexChange: -0.85,
+    condition: "cloudy",
+    temperature: 26,
+    pressure: 1011,
+    humidity: 48,
+    windSpeed: 12,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "United Arab Emirates",
+    code: "AE",
+    indexName: "DFM General Index",
+    indexValue: 4120.50,
+    indexChange: 0.25,
+    condition: "partly_cloudy",
+    temperature: 30,
+    pressure: 1015,
+    humidity: 39,
+    windSpeed: 15,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Poland",
+    code: "PL",
+    indexName: "WIG20",
+    indexValue: 2410.20,
+    indexChange: 0.65,
+    condition: "partly_cloudy",
+    temperature: 13,
+    pressure: 1016,
+    humidity: 28,
+    windSpeed: 24,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Austria",
+    code: "AT",
+    indexName: "ATX",
+    indexValue: 3612.40,
+    indexChange: 0.05,
+    condition: "cloudy",
+    temperature: 13,
+    pressure: 1010,
+    humidity: 42,
+    windSpeed: 18,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Hong Kong",
+    code: "HK",
+    indexName: "Hang Seng Index",
+    indexValue: 18610.50,
+    indexChange: -0.45,
+    condition: "cloudy",
+    temperature: 22,
+    pressure: 1011,
+    humidity: 48,
+    windSpeed: 12,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Philippines",
+    code: "PH",
+    indexName: "PSEi",
+    indexValue: 6610.20,
+    indexChange: -0.15,
+    condition: "cloudy",
+    temperature: 28,
+    pressure: 1011,
+    humidity: 48,
+    windSpeed: 12,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Vietnam",
+    code: "VN",
+    indexName: "VN-Index",
+    indexValue: 1240.50,
+    indexChange: 0.95,
+    condition: "partly_cloudy",
+    temperature: 27,
+    pressure: 1015,
+    humidity: 39,
+    windSpeed: 15,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "New Zealand",
+    code: "NZ",
+    indexName: "NZX 50",
+    indexValue: 11450.20,
+    indexChange: 0.15,
+    condition: "partly_cloudy",
+    temperature: 14,
+    pressure: 1014,
+    humidity: 42,
+    windSpeed: 16,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
+  },
+  {
+    country: "Pakistan",
+    code: "PK",
+    indexName: "KSE 100",
+    indexValue: 75210.30,
+    indexChange: 1.15,
+    condition: "clear_skies",
+    temperature: 29,
+    pressure: 1024,
+    humidity: 14,
+    windSpeed: 38,
+    alert: null,
+    summary: "",
+    economicAnalysis: "",
+    outlook5Day: []
   }
 ];
 
@@ -652,14 +1020,42 @@ const SYMBOL_TO_COUNTRY: Record<string, string> = {
   "^KLSE": "Malaysia",
   "^JKSE": "Indonesia",
   "^SET.BK": "Thailand",
-  "^TASI.SR": "Saudi Arabia"
+  "^TASI.SR": "Saudi Arabia",
+  "^MXX": "Mexico",
+  "^MERV": "Argentina",
+  "^IPSA": "Chile",
+  "^COLCAP": "Colombia",
+  "^SPBLPGPT": "Peru",
+  "^SSMI": "Switzerland",
+  "FTSEMIB.MI": "Italy",
+  "^IBEX": "Spain",
+  "^AEX": "Netherlands",
+  "^BFX": "Belgium",
+  "^OMXSPI": "Sweden",
+  "IMOEX.ME": "Russia",
+  "XU100.IS": "Turkey",
+  "^J200.JO": "South Africa",
+  "^EGX30": "Egypt",
+  "DFMGI.AE": "United Arab Emirates",
+  "^WIG20": "Poland",
+  "^ATX": "Austria",
+  "^HSI": "Hong Kong",
+  "^PSEI": "Philippines",
+  "^VNINDEX": "Vietnam",
+  "^NZ50": "New Zealand",
+  "^KSE": "Pakistan"
 };
 
 function dynamicallyUpdateThematicData(market: MarketWeather) {
   const baseTemps: Record<string, number> = {
     "United States": 29, "Japan": 19, "India": 32, "Germany": 15, "United Kingdom": 13,
     "France": 17, "China": 9, "Australia": 17, "Brazil": 10, "Canada": 16, "Taiwan": 24,
-    "South Korea": 18, "Singapore": 16, "Saudi Arabia": 28, "Malaysia": 25, "Indonesia": 26, "Thailand": 27
+    "South Korea": 18, "Singapore": 16, "Saudi Arabia": 28, "Malaysia": 25, "Indonesia": 26, 
+    "Thailand": 27, "Mexico": 21, "Argentina": 14, "Chile": 16, "Colombia": 22, "Peru": 18,
+    "Switzerland": 12, "Italy": 19, "Spain": 20, "Netherlands": 14, "Belgium": 14, "Sweden": 11,
+    "Russia": 6, "Turkey": 17, "South Africa": 18, "Egypt": 26, "United Arab Emirates": 30,
+    "Poland": 13, "Austria": 13, "Hong Kong": 22, "Philippines": 28, "Vietnam": 27, "New Zealand": 14,
+    "Pakistan": 29
   };
   const baseT = baseTemps[market.country] ?? 20;
   market.temperature = Math.max(-5, Math.min(45, Math.round(baseT + market.indexChange * 1.5)));
@@ -778,12 +1174,25 @@ function dynamicallyUpdateThematicData(market: MarketWeather) {
 // Auto-populate default caching alerts/forecasts on start
 marketCache.forEach(m => dynamicallyUpdateThematicData(m));
 
+const TRANSLATED_SYMBOL_MAP: Record<string, string> = {
+  "^EGX30": "^CASE30",
+  "^WIG20": "WIG20.WA",
+  "^PSEI": "PSEI.PS",
+  "^VNINDEX": "VNM"
+};
+
+const REVERSE_TRANSLATED_SYMBOL_MAP: Record<string, string> = {};
+for (const [orig, trans] of Object.entries(TRANSLATED_SYMBOL_MAP)) {
+  REVERSE_TRANSLATED_SYMBOL_MAP[trans] = orig;
+}
+
 let lastYahooFetchTime = 0;
 let isFetchingYahoo = false;
 
 // Async function to helper-fetch a specific symbol from Yahoo chart API as a reliable fallback
 async function fetchChartQuote(symbol: string): Promise<{ price: number; changePercent: number } | null> {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`;
+  const transSymbol = TRANSLATED_SYMBOL_MAP[symbol] || symbol;
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(transSymbol)}?interval=1d&range=1d`;
   try {
     const res = await fetch(url, {
       headers: {
@@ -795,12 +1204,16 @@ async function fetchChartQuote(symbol: string): Promise<{ price: number; changeP
     const payload: any = await res.json();
     const meta = payload?.chart?.result?.[0]?.meta;
     if (!meta) return null;
-    const price = meta.regularMarketPrice;
+    let price = meta.regularMarketPrice;
     const prevClose = meta.chartPreviousClose ?? meta.previousClose;
     if (typeof price === "number") {
       const changePercent = typeof prevClose === "number" && prevClose !== 0
         ? parseFloat((((price - prevClose) / prevClose) * 100).toFixed(2))
         : 0;
+
+      if (symbol === "^VNINDEX") {
+        price = parseFloat((price * 66.16).toFixed(2));
+      }
       return { price, changePercent };
     }
   } catch (e) {
@@ -866,7 +1279,8 @@ async function fetchYahooFinanceQuotes() {
   if (isFetchingYahoo) return;
   isFetchingYahoo = true;
   const symbols = Object.keys(SYMBOL_TO_COUNTRY);
-  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols.join(",")}`;
+  const translatedSymbols = symbols.map(s => TRANSLATED_SYMBOL_MAP[s] || s);
+  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${translatedSymbols.join(",")}`;
   const updatedSymbols = new Set<string>();
 
   // Synchronize Taiwan Index from official TWSE (WantGoo source authority) first for maximum accuracy
@@ -892,7 +1306,8 @@ async function fetchYahooFinanceQuotes() {
       const result = payload?.quoteResponse?.result;
       if (Array.isArray(result)) {
         for (const item of result) {
-          const symbol = item.symbol;
+          const transSymbol = item.symbol;
+          const symbol = REVERSE_TRANSLATED_SYMBOL_MAP[transSymbol] || transSymbol;
           if (symbol === "^TWII" && updatedSymbols.has("^TWII")) {
             // Already updated with highly accurate official real-time TWSE API, skip Yahoo stale data
             continue;
@@ -900,8 +1315,12 @@ async function fetchYahooFinanceQuotes() {
           const countryName = SYMBOL_TO_COUNTRY[symbol];
           if (!countryName) continue;
 
-          const price = item.regularMarketPrice;
+          let price = item.regularMarketPrice;
           const changePercent = item.regularMarketChangePercent;
+
+          if (symbol === "^VNINDEX" && typeof price === "number") {
+            price = parseFloat((price * 66.16).toFixed(2));
+          }
 
           if (typeof price === "number" && typeof changePercent === "number") {
             const market = marketCache.find(m => m.country.toLowerCase() === countryName.toLowerCase());
