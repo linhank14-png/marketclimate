@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ReactNode } from "react";
+import { ReactNode, CSSProperties } from "react";
 import { Thermometer, Gauge, Droplets, Wind } from "lucide-react";
 
 interface ClimateInstrumentProps {
@@ -66,18 +66,55 @@ export default function ClimateInstrument({
 
   const selectedTheme = themes[theme] || themes.slate;
 
+  // Real-time animation variables based on meteorological intensity percentage
+  let customIconStyle: CSSProperties = {};
+  let iconClass = "";
+
+  if (id === "gauge_wind") {
+    // Shorter duration = faster rotation for higher wind volumes
+    const durSec = Math.max(0.5, 8 - (percentage / 100) * 7.2);
+    customIconStyle = { animation: `spin ${durSec}s linear infinite` };
+  } else if (id === "gauge_temperature") {
+    // Pulse animation frequency scales with temperature heat index
+    const durSec = Math.max(0.8, 3 - (percentage / 100) * 2);
+    customIconStyle = { animation: `pulse ${durSec}s ease-in-out infinite` };
+  } else if (id === "gauge_humidity") {
+    // Float/bobbing animation scaling with fear levels (humidity)
+    const durSec = Math.max(1, 4 - (percentage / 100) * 2.8);
+    customIconStyle = { 
+      animation: `bounce ${durSec}s ease-in-out infinite`,
+      transformOrigin: "center"
+    };
+  } else if (id === "gauge_pressure") {
+    // Heavy gauge indicator indicator shake if pressure drops/breaks
+    const isCrisis = percentage < 25 || percentage > 85;
+    if (isCrisis) {
+      iconClass = "animate-bounce";
+    }
+  }
+
   return (
-    <div id={id} className={`p-5 rounded-2xl border bg-slate-900/30 ${selectedTheme.border} transition-all hover:bg-slate-900/80`}>
+    <div 
+      id={id} 
+      className={`p-5 rounded-2xl border bg-slate-900/40 ${selectedTheme.border} transition-all duration-300 hover:bg-slate-900/80 hover:scale-[1.02] hover:shadow-lg relative overflow-hidden group`}
+    >
+      {/* Decorative background grid flare */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.01] to-transparent pointer-events-none rounded-2xl"></div>
+
       <div className="flex items-start justify-between mb-2">
         <div>
-          <span className="text-[10px] uppercase tracking-wider text-slate-500 font-mono font-bold">
+          <span className="text-[10px] uppercase tracking-wider text-slate-500 font-mono font-bold flex items-center gap-1">
+            <span className={`w-1 h-1 rounded-full ${selectedTheme.bar} inline-block group-hover:animate-ping`}></span>
             {label}
           </span>
           <h4 className="text-sm font-bold text-slate-200 leading-tight">
             {financialMeasure}
           </h4>
         </div>
-        <div className={`p-2 rounded-xl ${selectedTheme.bg} ${selectedTheme.text}`}>
+        <div 
+          className={`p-2 rounded-xl transition-all ${selectedTheme.bg} ${selectedTheme.text} ${iconClass}`}
+          style={customIconStyle}
+        >
           {icon}
         </div>
       </div>

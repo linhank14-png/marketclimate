@@ -922,23 +922,100 @@ export default function App() {
             {selectedCountry ? (
               <div className="bg-slate-900/50 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col h-full" id="focus_station_card">
                 
-                {/* Visual Sky Banner Header - Premium Primary Forecast Card design */}
-                <div className={`p-6 sm:p-10 relative overflow-hidden bg-gradient-to-br ${
-                  selectedCountry.condition === "clear_skies" ? "from-amber-400 to-orange-600 shadow-amber-900/10" :
-                  selectedCountry.condition === "partly_cloudy" ? "from-blue-500 to-indigo-600 shadow-blue-900/10" :
-                  selectedCountry.condition === "cloudy" ? "from-slate-600 to-slate-800 shadow-slate-900/10" :
-                  selectedCountry.condition === "rainy" ? "from-sky-700 to-indigo-950 shadow-indigo-950/10" :
-                  "from-rose-800 to-slate-950 shadow-rose-950/10"
-                }`} id="weather_gradient_banner">
-
-                  {/* Glowing decorative ambient blob */}
-                  <div className={`absolute -top-10 -right-10 w-72 h-72 rounded-full blur-3xl ${
-                    selectedCountry.condition === "clear_skies" ? "bg-yellow-300/20" :
-                    selectedCountry.condition === "partly_cloudy" ? "bg-white/20" :
-                    selectedCountry.condition === "cloudy" ? "bg-slate-300/20" :
-                    selectedCountry.condition === "rainy" ? "bg-blue-300/20" :
-                    "bg-rose-400/20"
-                  }`}></div>
+                 {/* Visual Sky Banner Header - Premium Primary Forecast Card design */}
+                 <div className={`p-6 sm:p-10 relative overflow-hidden bg-gradient-to-br ${
+                   selectedCountry.condition === "clear_skies" ? "from-amber-400 to-orange-600 shadow-amber-900/10" :
+                   selectedCountry.condition === "partly_cloudy" ? "from-blue-500 to-indigo-600 shadow-blue-900/10" :
+                   selectedCountry.condition === "cloudy" ? "from-slate-600 to-slate-800 shadow-slate-900/10" :
+                   selectedCountry.condition === "rainy" ? "from-sky-700 to-indigo-950 shadow-indigo-950/10" :
+                   "from-rose-800 to-slate-950 shadow-rose-950/10"
+                 }`} id="weather_gradient_banner">
+ 
+                   {/* Dynamic Climatology Particle Effects Keyframes */}
+                   <style dangerouslySetInnerHTML={{ __html: `
+                     @keyframes particle-drift {
+                       0% { transform: translate3d(-10%, 0, 0); opacity: 0; }
+                       15% { opacity: 0.3; }
+                       85% { opacity: 0.3; }
+                       100% { transform: translate3d(110%, 15px, 0); opacity: 0; }
+                     }
+                     @keyframes particle-rain-fall {
+                       0% { transform: translateY(-40px) rotate(12deg); opacity: 0; }
+                       25% { opacity: 0.55; }
+                       85% { opacity: 0.55; }
+                       100% { transform: translateY(320px) rotate(12deg); opacity: 0; }
+                     }
+                     @keyframes particle-lightning-flicker {
+                       0%, 93%, 97%, 100% { opacity: 0; }
+                       94%, 96% { opacity: 0.3; }
+                     }
+                     @keyframes particle-heat-rise {
+                       0%, 100% { transform: translateY(0) scale(1); opacity: 0.15; }
+                       50% { transform: translateY(-50px) scale(1.4); opacity: 0.75; }
+                     }
+                     .pt-wind {
+                       animation: particle-drift 14s linear infinite;
+                     }
+                     .pt-rain {
+                       animation: particle-rain-fall 1.3s linear infinite;
+                     }
+                     .pt-lightning-flash {
+                       animation: particle-lightning-flicker 9s ease-in-out infinite;
+                     }
+                     .pt-heat-mote {
+                       animation: particle-heat-rise 5s ease-in-out infinite;
+                     }
+                   `}} />
+ 
+                   {/* Atmospheric Particle Overlays */}
+                   <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
+                     {/* Clear Skies Heat Motes */}
+                     {selectedCountry.condition === "clear_skies" && (
+                       <div className="absolute inset-0">
+                         <div className="absolute w-2 h-2 bg-yellow-105 bg-yellow-100 rounded-full pt-heat-mote" style={{ left: '15%', bottom: '20%', animationDelay: '0s' }}></div>
+                         <div className="absolute w-3 h-3 bg-yellow-250 bg-yellow-200 rounded-full pt-heat-mote" style={{ left: '42%', bottom: '10%', animationDelay: '1.4s' }}></div>
+                         <div className="absolute w-1.5 h-1.5 bg-white rounded-full pt-heat-mote" style={{ left: '68%', bottom: '30%', animationDelay: '3.1s' }}></div>
+                         <div className="absolute w-2.5 h-2.5 bg-orange-300 rounded-full pt-heat-mote" style={{ left: '85%', bottom: '15%', animationDelay: '0.9s' }}></div>
+                         <div className="absolute w-2 h-2 bg-yellow-100 rounded-full pt-heat-mote" style={{ left: '30%', bottom: '35%', animationDelay: '2.5s' }}></div>
+                       </div>
+                     )}
+ 
+                     {/* Drifting Clouds on Partly Cloudy / Cloudy */}
+                     {(selectedCountry.condition === "partly_cloudy" || selectedCountry.condition === "cloudy") && (
+                       <div className="absolute inset-0">
+                         <div className="absolute h-4 w-32 bg-white/10 rounded-full pt-wind blur-xs" style={{ top: '15%', animationDelay: '0s' }}></div>
+                         <div className="absolute h-3 w-24 bg-white/5 rounded-full pt-wind blur-xs" style={{ top: '45%', animationDelay: '3.5s' }}></div>
+                         <div className="absolute h-5 w-40 bg-white/10 rounded-full pt-wind blur-xs" style={{ top: '70%', animationDelay: '7.2s' }}></div>
+                       </div>
+                     )}
+ 
+                     {/* Falling Rain drops */}
+                     {(selectedCountry.condition === "rainy" || selectedCountry.condition === "thunderstorms") && (
+                       <div className="absolute inset-0">
+                         <div className="absolute w-[1.5px] h-6 bg-blue-200/40 rounded-full pt-rain" style={{ left: '12%', top: '-20px', animationDelay: '0s' }}></div>
+                         <div className="absolute w-[1.5px] h-5 bg-blue-100/35 rounded-full pt-rain" style={{ left: '28%', top: '-20px', animationDelay: '0.4s' }}></div>
+                         <div className="absolute w-[2px] h-7 bg-white/30 rounded-full pt-rain" style={{ left: '44%', top: '-20px', animationDelay: '0.8s' }}></div>
+                         <div className="absolute w-[1.5px] h-4 bg-sky-200/40 rounded-full pt-rain" style={{ left: '58%', top: '-20px', animationDelay: '0.15s' }}></div>
+                         <div className="absolute w-[1.5px] h-6 bg-sky-100/30 rounded-full pt-rain" style={{ left: '72%', top: '-20px', animationDelay: '1.1s' }}></div>
+                         <div className="absolute w-[2px] h-5 bg-blue-200/35 rounded-full pt-rain" style={{ left: '88%', top: '-20px', animationDelay: '0.5s' }}></div>
+                         <div className="absolute w-[1.5px] h-6 bg-white/35 rounded-full pt-rain" style={{ left: '95%', top: '-20px', animationDelay: '1.5s' }}></div>
+                       </div>
+                     )}
+ 
+                     {/* Thunderstorms lightning flicker overlays */}
+                     {selectedCountry.condition === "thunderstorms" && (
+                       <div className="absolute inset-0 bg-white pt-lightning-flash pointer-events-none mix-blend-overlay z-0"></div>
+                     )}
+                   </div>
+ 
+                   {/* Glowing decorative ambient blob */}
+                   <div className={`absolute -top-10 -right-10 w-72 h-72 rounded-full blur-3xl ${
+                     selectedCountry.condition === "clear_skies" ? "bg-yellow-300/20" :
+                     selectedCountry.condition === "partly_cloudy" ? "bg-white/20" :
+                     selectedCountry.condition === "cloudy" ? "bg-slate-300/20" :
+                     selectedCountry.condition === "rainy" ? "bg-blue-300/20" :
+                     "bg-rose-400/20"
+                   }`}></div>
 
                   <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                     <div>

@@ -42,19 +42,44 @@ export default function WeatherTicker({ markets, onSelectCountry, locale = "en" 
     thunderstorms: "雷暴降臨"
   };
 
+  const duplicatedMarkets = [...markets, ...markets];
+
   return (
-    <div className="w-full bg-slate-950 border-b border-slate-800 py-3 px-4 overflow-hidden">
+    <div className="w-full bg-slate-950 border-b border-slate-800 py-3 px-4 overflow-hidden relative">
+      <style>{`
+        @keyframes ticker-scroll {
+          0% { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
+        }
+        .ticker-marquee {
+          display: flex;
+          gap: 1.5rem;
+          width: max-content;
+          animation: ticker-scroll 100s linear infinite;
+        }
+        .ticker-marquee:hover {
+          animation-play-state: paused;
+        }
+        .ticker-container::-webkit-scrollbar {
+          display: none;
+        }
+        .ticker-container {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+
       <div className="flex items-center gap-3">
         {/* Ticker status badge */}
-        <div className="flex items-center gap-2 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[10px] text-emerald-400 font-mono tracking-wider shrink-0">
+        <div className="flex items-center gap-2 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[10px] text-emerald-400 font-mono tracking-wider shrink-0 z-10 bg-slate-950 pr-2">
           <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
           {isZht ? "即時衛星掃描" : isZh ? "实时卫星扫描" : "LIVE SAT SCAN"}
         </div>
         
         {/* Horizontal Marquee Track */}
-        <div className="relative flex items-center w-full overflow-x-auto no-scrollbar scroll-smooth">
-          <div className="flex items-center gap-6 whitespace-nowrap animate-none">
-            {markets.map((market) => {
+        <div className="relative flex items-center w-full overflow-hidden ticker-container">
+          <div className="ticker-marquee">
+            {duplicatedMarkets.map((market, index) => {
               const conditionLabel = isZht
                 ? overridesZht[market.condition]
                 : isZh
@@ -64,14 +89,14 @@ export default function WeatherTicker({ markets, onSelectCountry, locale = "en" 
               
               return (
                 <button
-                  key={market.code}
+                  key={`${market.code}-${index}`}
                   onClick={() => onSelectCountry(market)}
-                  className="flex items-center gap-2.5 text-xs hover:bg-slate-800/50 py-1 px-2 rounded-lg transition-all shrink-0 cursor-pointer"
+                  className="flex items-center gap-2.5 text-xs hover:bg-slate-800/50 py-1 px-2.5 rounded-lg transition-all shrink-0 cursor-pointer"
                 >
                   <span className="text-base" title={market.country}>
                     {getFlag(market.code)}
                   </span>
-                  <span className="font-semibold text-slate-250 font-display">
+                  <span className="font-semibold text-slate-200 hover:text-white font-display">
                     {market.indexName}
                   </span>
                   <span className="text-slate-400 font-mono text-[11px]">
