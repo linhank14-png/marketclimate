@@ -791,8 +791,46 @@ export default function App() {
                             </span>
                           </div>
                           
-                          <div className="w-full bg-slate-700 h-1 mt-2 rounded-full overflow-hidden">
-                            <div className={`h-full ${barColor} transition-all`} style={{ width: `${pctVal}%` }}></div>
+                          {/* Micro Meteorological Indicators row */}
+                          <div className="flex items-center gap-2 mt-2 text-[10px] text-slate-400 font-mono bg-slate-950/40 px-2.5 py-1.5 rounded-xl border border-slate-800/80 justify-between">
+                            <span className="flex items-center gap-1" title={isZh ? "估值溫標" : "Valuation Temp"}>
+                              <span className="text-amber-500 text-[11px] select-none">🌡️</span>
+                              <span className="text-slate-300 font-bold">{market.temperature}°C</span>
+                            </span>
+                            <span className="flex items-center gap-1" title={isZh ? "波動濕度 (VIX)" : "Volatility Humidity (VIX)"}>
+                              <span className="text-sky-400 text-[11px] select-none">💧</span>
+                              <span className="text-slate-300 font-bold">{market.humidity}%</span>
+                            </span>
+                            <span className="flex items-center gap-1" title={isZh ? "資金風速" : "Capital Windspeed"}>
+                              <span className="text-teal-400 text-[11px] select-none">💨</span>
+                              <span className="text-slate-300 font-bold">{Math.round(market.windSpeed)}{isZh ? " 碼" : " km/h"}</span>
+                            </span>
+                          </div>
+
+                          {/* Bidirectional Price Change Bar */}
+                          <div className="w-full mt-2.5 px-0.5">
+                            <div className="flex justify-between items-center text-[9px] text-slate-500 font-mono mb-1 scale-95 origin-left">
+                              <span>-4.0%</span>
+                              <span className="text-slate-600 font-bold">0%</span>
+                              <span>+4.0%</span>
+                            </div>
+                            <div className="w-full h-1.5 bg-slate-950 rounded-full relative overflow-hidden border border-slate-900">
+                              {/* Center Baseline Tick */}
+                              <div className="absolute left-1/2 -translate-x-1/2 w-[1.5px] h-full bg-slate-700/80 z-10" />
+                              
+                              {/* Range Filler */}
+                              {isPositive ? (
+                                <div 
+                                  className="absolute left-1/2 h-full bg-emerald-500 rounded-r-full transition-all duration-500 ease-out"
+                                  style={{ width: `${Math.min(50, (market.indexChange / 4.0) * 50)}%` }}
+                                />
+                              ) : (
+                                <div 
+                                  className="absolute right-1/2 h-full bg-rose-500 rounded-l-full transition-all duration-500 ease-out"
+                                  style={{ width: `${Math.min(50, (Math.abs(market.indexChange) / 4.0) * 50)}%` }}
+                                />
+                              )}
+                            </div>
                           </div>
 
                           <div className="flex justify-between items-center mt-2">
@@ -1325,7 +1363,7 @@ export default function App() {
                   </div>
 
                   {/* 5-day outlook chart (Recharts) */}
-                  <OutlookForecastChart data={selectedCountry.outlook5Day} isZh={isZh} />
+                  <OutlookForecastChart data={selectedCountry.outlook5Day} isZh={isZh} selectedCountry={selectedCountry} />
 
                   {/* Operational Action Panel */}
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 bg-slate-900/40 border border-slate-800 rounded-2xl">

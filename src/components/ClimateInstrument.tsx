@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ReactNode, CSSProperties } from "react";
+import { ReactNode, CSSProperties, useState, useEffect, useRef } from "react";
+import { motion } from "motion/react";
 import { Thermometer, Gauge, Droplets, Wind } from "lucide-react";
 
 interface ClimateInstrumentProps {
@@ -17,6 +18,60 @@ interface ClimateInstrumentProps {
   description: string;
   id?: string;
   extraInfo?: ReactNode;
+}
+
+function parseNumericValue(val: string | number): { num: number; suffix: string } {
+  if (typeof val === "number") {
+    return { num: val, suffix: "" };
+  }
+  const match = val.match(/([\d\.]+)/);
+  if (match) {
+    const num = parseFloat(match[1]);
+    const suffix = val.replace(match[1], "");
+    return { num: isNaN(num) ? 0 : num, suffix };
+  }
+  return { num: 0, suffix: String(val) };
+}
+
+function useAnimatedNumber(target: number, duration: number = 800) {
+  const [current, setCurrent] = useState(target);
+  const startValRef = useRef(target);
+  const targetValRef = useRef(target);
+  const startTimeRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (targetValRef.current !== target) {
+      startValRef.current = current;
+      targetValRef.current = target;
+      startTimeRef.current = null;
+    }
+
+    let animationFrameId: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTimeRef.current) {
+        startTimeRef.current = timestamp;
+      }
+      const elapsed = timestamp - startTimeRef.current;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      const easeProgress = progress * (2 - progress); // quadratic ease out
+      const currentVal = startValRef.current + (targetValRef.current - startValRef.current) * easeProgress;
+      setCurrent(currentVal);
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [target, duration]);
+
+  return current;
 }
 
 export default function ClimateInstrument({
@@ -65,6 +120,14 @@ export default function ClimateInstrument({
   };
 
   const selectedTheme = themes[theme] || themes.slate;
+
+  const { num, suffix } = parseNumericValue(value);
+  const rawTargetStr = String(value);
+  const matchedDecimals = rawTargetStr.match(/\.(\d+)/);
+  const precision = matchedDecimals ? matchedDecimals[1].length : 0;
+
+  const animatedNumber = useAnimatedNumber(num, 800);
+  const formattedValue = `${animatedNumber.toFixed(precision)}${suffix}`;
 
   // Real-time animation variables based on meteorological intensity percentage
   let customIconStyle: CSSProperties = {};
@@ -121,7 +184,7 @@ export default function ClimateInstrument({
 
       <div className="flex items-baseline gap-1 mt-3">
         <span className="text-3xl font-extrabold tracking-tight text-white font-mono">
-          {value}
+          {formattedValue}
         </span>
         <span className="text-xs text-slate-400 font-mono uppercase font-bold">
           {unit}
@@ -130,9 +193,11 @@ export default function ClimateInstrument({
 
       {/* Progress Line */}
       <div className="w-full h-1.5 bg-slate-950 rounded-full mt-3 overflow-hidden">
-        <div
-          className={`h-full ${selectedTheme.bar} rounded-full transition-all duration-1000`}
-          style={{ width: `${Math.max(3, Math.min(100, percentage))}%` }}
+        <motion.div
+          className={`h-full ${selectedTheme.bar} rounded-full`}
+          initial={false}
+          animate={{ width: `${Math.max(3, Math.min(100, percentage))}%` }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         />
       </div>
 
